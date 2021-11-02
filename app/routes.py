@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, render_template
 from app import app, db
 from app.errors import NotFoundError, ValidationError, BadRequestError
 from app.models import User, Order, Offer
@@ -19,6 +19,11 @@ def on_not_validation_error(error):
 @app.errorhandler(BadRequestError)
 def on_not_validation_error(error):
     return "Bad request error", 405
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
 @app.route('/users/')
