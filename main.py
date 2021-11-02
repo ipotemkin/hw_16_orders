@@ -21,32 +21,12 @@ class User(db.Model):
     role = db.Column(db.String)
     phone = db.Column(db.String)
 
-    def __repr__(self):
-        return {'id': self.id, 'first_name': self.first_name, 'last_name': self.last_name, 'age': self.age,
-                'email': self.email, 'role': self.role, 'phone': self.phone}
-
-    def to_dict(self):
-        for column in self.__table__.columns:
-            print(column.name, self[column.name])
-
-    def columns(self):
-        return [column.name for column in self.__table__.columns]
-
-
-USER_COLUMNS = ['id', 'first_name', 'last_name', 'age', 'email', 'role', 'phone']
-
 
 class Offer(db.Model):
     __tablename__ = 'offers'
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer)
     executor_id = db.Column(db.Integer)
-
-    def __repr__(self):
-        return {'id': self.id, 'order_id': self.order_id, 'executor_id': self.executor_id}
-
-
-OFFER_COLUMNS = ['id', 'order_id', 'executor_id']
 
 
 class Order(db.Model):
@@ -61,20 +41,6 @@ class Order(db.Model):
     customer_id = db.Column(db.Integer)
     executor_id = db.Column(db.Integer)
 
-    def __repr__(self):
-        return {'id': self.id, 'name': self.name, 'description': self.description, 'start_date': self.start_date,
-                'end_date': self.end_date, 'address': self.address, 'price': self.price,
-                'customer_id': self.customer_id, 'executor_id': self.executor_id}
-
-
-ORDER_COLUMNS = ['id', 'name', 'description', 'start_date', 'end_date', 'address', 'price', 'customer_id',
-                 'executor_id']
-
-
-def make_str_form_dict(record: dict):
-    s_lst = [str(key) + '=\'' + str(value) + '\'' for key, value in record.items()]
-    return ', '.join(s_lst)
-
 
 @app.errorhandler(404)
 @app.errorhandler(NotFoundError)
@@ -87,70 +53,81 @@ def on_not_validation_error(error):
     return "Validation error", 400
 
 
-def add_column_names(column_names: list, data: list or dict):
-    if not column_names or not data:
+# def add_column_names(column_names: list, data: list or dict):
+#     if not column_names or not data:
+#         raise NotFoundError
+#     results = []
+#     if type(data) == list:
+#         if len(column_names) != len(data[0].__repr__()):
+#             raise ValidationError
+#         for line_ in data:
+#             results_line = dict()
+#             for key in column_names:
+#                 results_line[key] = line_.__repr__()[key]
+#             results.append(results_line)
+#         return results
+#     if len(column_names) != len(data.__repr__()):
+#         raise ValidationError
+#     return data.__repr__()
+
+
+def get_all_json(tablename: str) -> json:
+    if not (res := db.engine.execute(f'select * from {tablename}')):
         raise NotFoundError
-    results = []
-    if type(data) == list:
-        if len(column_names) != len(data[0].__repr__()):
-            raise ValidationError
-        for line_ in data:
-            results_line = dict()
-            for key in column_names:
-                results_line[key] = line_.__repr__()[key]
-            results.append(results_line)
-        return results
-    if len(column_names) != len(data.__repr__()):
-        raise ValidationError
-    return data.__repr__()
+    return jsonify([dict(r) for r in res])
+
+
+def get_json(tablename: str, uid: int) -> json:
+    if not (res := db.engine.execute(f'select * from {tablename} where id = {uid}').first()):
+        raise NotFoundError
+    return jsonify(dict(res))
 
 
 @app.route('/users/')
 def get_all_users():
-    res = db.engine.execute('select * from users')
-    return jsonify([dict(r) for r in res])
-    # return jsonify(add_column_names(USER_COLUMNS, data=User.query.all()))
+    return get_all_json('users')
 
 
 @app.route('/users/<int:uid>')
 def get_user_by_id(uid: int):
-    return jsonify(add_column_names(USER_COLUMNS, data=User.query.get(uid)))
+    return get_json('users', uid)
 
 
 @app.route('/offers/')
 def get_all_offers():
-    return jsonify(add_column_names(OFFER_COLUMNS, data=Offer.query.all()))
+    return get_all_json('offers')
 
 
 @app.route('/offers/<int:uid>')
 def get_offer_by_id(uid: int):
-    return jsonify(add_column_names(OFFER_COLUMNS, data=Offer.query.get(uid)))
+    return get_json('offers', uid)
 
 
 @app.route('/users/', methods=['POST'])
 def add_user():
     new_user = request.get_json()
-    user = User(**new_user)
-    db.session.add(user)
+    user_ = User(**new_user)
+    db.session.add(user_)
     db.session.commit()
     return new_user, 201
 
 
 @app.route('/users/<int:uid>', methods=['PUT'])
 def update_user(uid: int):
-    user = User.query.get(uid)
-    update_user_ = request.get_json()
-    print(user.__repr__())
-    print(update_user_)
-    for field, value in update_user_.items():
-        print('field =', field)
-        print('value =', value)
-        print('user[%s] =' % field, user.age)
-        user.age = value
-    db.session.add(user)
-    db.session.commit()
-    columns = [column.name for column in User.__table__.columns]
-    return jsonify(add_column_names(columns, data=User.query.get(uid))), 200
+    # user = User.query.get(uid)
+    # update_user_ = request.get_json()
+    # print(user.__repr__())
+    # print(update_user_)
+    # for field, value in update_user_.items():
+    #     print('field =', field)
+    #     print('value =', value)
+    #     print('user[%s] =' % field, user.age)
+    #     user.age = value
+    # db.session.add(user)
+    # db.session.commit()
+    # columns = [column.name for column in User.__table__.columns]
+    # return jsonify(add_column_names(columns, data=User.query.get(uid))), 200
+    pass
 
 
 if __name__ == '__main__':
@@ -164,11 +141,11 @@ if __name__ == '__main__':
         db.session.add(Offer(**line))
     db.session.commit()
 
-    print([(key, value, type(value)) for key, value in User.__dict__.items()])
-    print([column for column in User.__table__.columns])
-    print([(column.name, column.type) for column in User.__table__.columns])
-    user = User.query.get(1)
-    print(user.columns())
+    # print([(key, value, type(value)) for key, value in User.__dict__.items()])
+    # print([column for column in User.__table__.columns])
+    # print([(column.name, column.type) for column in User.__table__.columns])
+    # user = User.query.get(1)
+    # print(user.columns())
 
     # cursor = db.session.execute(f"SELECT * from {User.__tablename__}").cursor
     # mytable = prettytable.from_db_cursor(cursor)
