@@ -3,7 +3,7 @@ from app import db
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
     age = db.Column(db.Integer)
@@ -14,14 +14,14 @@ class User(db.Model):
 
 class Offer(db.Model):
     __tablename__ = 'offers'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     order_id = db.Column(db.Integer)
     executor_id = db.Column(db.Integer)
 
 
 class Order(db.Model):
     __tablename__ = 'orders'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String)
     description = db.Column(db.String)
     start_date = db.Column(db.String)

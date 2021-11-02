@@ -1,6 +1,7 @@
 from data import users, orders, offers
 from app import app, db
 from app.models import User, Order, Offer
+import prettytable
 
 
 if __name__ == '__main__':
@@ -20,19 +21,19 @@ if __name__ == '__main__':
     # user = User.query.get(1)
     # print(user.columns())
 
-    # cursor = db.session.execute(f"SELECT * from {User.__tablename__}").cursor
-    # mytable = prettytable.from_db_cursor(cursor)
-    # mytable.max_width = 30
-    # print(mytable)
-    #
-    # cursor = db.session.execute(f"SELECT * from {Order.__tablename__}").cursor
-    # mytable = prettytable.from_db_cursor(cursor)
-    # mytable.max_width = 30
-    # print(mytable)
-    #
-    # cursor = db.session.execute(f"SELECT * from {Offer.__tablename__}").cursor
-    # mytable = prettytable.from_db_cursor(cursor)
-    # mytable.max_width = 30
-    # print(mytable)
+    cursor = db.session.execute(f"SELECT * from {User.__tablename__}").cursor
+    mytable = prettytable.from_db_cursor(cursor)
+    mytable.max_width = 30
+    print(mytable)
+
+    cursor = db.session.execute(f"SELECT * from {Order.__tablename__}").cursor
+    mytable = prettytable.from_db_cursor(cursor)
+    mytable.max_width = 30
+    print(mytable)
+
+    cursor = db.session.execute(f"SELECT * from {Offer.__tablename__}").cursor
+    mytable = prettytable.from_db_cursor(cursor)
+    mytable.max_width = 30
+    print(mytable)
 
     app.run()
