@@ -15,8 +15,8 @@ class User(db.Model):
 class Offer(db.Model):
     __tablename__ = 'offers'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    order_id = db.Column(db.Integer)
-    executor_id = db.Column(db.Integer)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'))
+    executor_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 class Order(db.Model):
@@ -28,5 +28,7 @@ class Order(db.Model):
     end_date = db.Column(db.String)
     address = db.Column(db.String)
     price = db.Column(db.Integer)
-    customer_id = db.Column(db.Integer)
-    executor_id = db.Column(db.Integer)
+    customer_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    executor_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    offers = db.relationship('Offer', backref='order', lazy='dynamic')
+

@@ -57,7 +57,7 @@ def add_user():
     user_ = User(**new_user)
     db.session.add(user_)
     db.session.commit()
-    return new_user, 201
+    return get_json('users', user_.id), 201
 
 
 @app.route('/users/<int:uid>', methods=['PUT'])
