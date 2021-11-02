@@ -1,45 +1,8 @@
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from data import users, orders, offers
-import prettytable
-from errors import NotFoundError, ValidationError, BadRequestError
+from flask import jsonify, request
+from app import app, db
+from app.errors import NotFoundError, ValidationError, BadRequestError
+from app.models import User, Order, Offer
 import json
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-
-class User(db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String)
-    last_name = db.Column(db.String)
-    age = db.Column(db.Integer)
-    email = db.Column(db.String)
-    role = db.Column(db.String)
-    phone = db.Column(db.String)
-
-
-class Offer(db.Model):
-    __tablename__ = 'offers'
-    id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer)
-    executor_id = db.Column(db.Integer)
-
-
-class Order(db.Model):
-    __tablename__ = 'orders'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    description = db.Column(db.String)
-    start_date = db.Column(db.String)
-    end_date = db.Column(db.String)
-    address = db.Column(db.String)
-    price = db.Column(db.Integer)
-    customer_id = db.Column(db.Integer)
-    executor_id = db.Column(db.Integer)
 
 
 @app.errorhandler(404)
@@ -218,38 +181,3 @@ def del_offer(uid):
     db.session.delete(offer_)
     db.session.commit()
     return f"Offer: {uid} deleted", 200
-
-
-if __name__ == '__main__':
-    db.create_all()
-
-    for line in users:
-        db.session.add(User(**line))
-    for line in orders:
-        db.session.add(Order(**line))
-    for line in offers:
-        db.session.add(Offer(**line))
-    db.session.commit()
-
-    # print([(key, value, type(value)) for key, value in User.__dict__.items()])
-    # print([column for column in User.__table__.columns])
-    # print([(column.name, column.type) for column in User.__table__.columns])
-    # user = User.query.get(1)
-    # print(user.columns())
-
-    # cursor = db.session.execute(f"SELECT * from {User.__tablename__}").cursor
-    # mytable = prettytable.from_db_cursor(cursor)
-    # mytable.max_width = 30
-    # print(mytable)
-    #
-    # cursor = db.session.execute(f"SELECT * from {Order.__tablename__}").cursor
-    # mytable = prettytable.from_db_cursor(cursor)
-    # mytable.max_width = 30
-    # print(mytable)
-    #
-    # cursor = db.session.execute(f"SELECT * from {Offer.__tablename__}").cursor
-    # mytable = prettytable.from_db_cursor(cursor)
-    # mytable.max_width = 30
-    # print(mytable)
-
-    app.run()
