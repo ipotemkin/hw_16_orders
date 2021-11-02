@@ -1,8 +1,8 @@
-from flask import jsonify, request
+from flask import request
 from app import app, db
 from app.errors import NotFoundError, ValidationError, BadRequestError
 from app.models import User, Order, Offer
-import json
+from app.utils import get_all_json, get_json
 
 
 @app.errorhandler(404)
@@ -19,18 +19,6 @@ def on_not_validation_error(error):
 @app.errorhandler(BadRequestError)
 def on_not_validation_error(error):
     return "Bad request error", 405
-
-
-def get_all_json(tablename: str) -> json:
-    if not (res := db.engine.execute(f'select * from {tablename}')):
-        raise NotFoundError
-    return jsonify([dict(r) for r in res])
-
-
-def get_json(tablename: str, uid: int) -> json:
-    if not (res := db.engine.execute(f'select * from {tablename} where id = {uid}').first()):
-        raise NotFoundError
-    return jsonify(dict(res))
 
 
 @app.route('/users/')
