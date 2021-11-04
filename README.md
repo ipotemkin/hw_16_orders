@@ -6,7 +6,7 @@ Functions realized:
 > Get all users
 >> `GET /users/`
 > ```json
-> [{
+>    [{
 >        "age": 31,
 >        "email": "elliot16@mymail.com",
 >        "first_name": "Hudson",
@@ -30,47 +30,47 @@ Functions realized:
 >> `GET /users/id`
 > ```json
 >   {
->    "age": 20,
->    "email": "joshua18@mymail.com",
->    "first_name": "Lester",
->    "id": 5,
->    "last_name": "Archibaldoh",
->    "phone": "8825887253",
->    "role": "executor"
+>       "age": 20,
+>       "email": "joshua18@mymail.com",
+>       "first_name": "Lester",
+>       "id": 5,
+>       "last_name": "Archibaldoh",
+>       "phone": "8825887253",
+>       "role": "executor"
 >   }
->>```
+>```
 
 > Add a user
 >> `POST /users/`
 > ```json
 >   {
->    "age": 20,
->    "email": "joshua18@mymail.com",
->    "first_name": "Lester",
->    "last_name": "Archibaldoh",
->    "phone": "8825887253",
->    "role": "executor"
+>       "age": 20,
+>       "email": "joshua18@mymail.com",
+>       "first_name": "Lester",
+>       "last_name": "Archibaldoh",
+>       "phone": "8825887253",
+>       "role": "executor"
 >   }
->>``` 
+>``` 
 
 > Update a user with ID
 >> `PUT /users/id`
 > ```json
 >   {
->    "age": 20,
->    "email": "joshua18@mymail.com",
->    "first_name": "Lester",
->    "last_name": "Archibaldoh",
->    "phone": "8825887253",
->    "role": "executor"
+>       "age": 20,
+>       "email": "joshua18@mymail.com",
+>       "first_name": "Lester",
+>       "last_name": "Archibaldoh",
+>       "phone": "8825887253",
+>       "role": "executor"
 >   }
->>``` 
+>``` 
 
 > Delete a user with ID
 >> `DELETE /users/id`
 
 > Get all orders
->> `GET /urders/`
+>> `GET /orders/`
 > ```json
 >   [{
 >        "address": "4759 William Haven Apt. 194\nWest Corey, TX 43780",
