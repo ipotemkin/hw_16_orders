@@ -8,7 +8,7 @@ class User(db.Model):
     last_name = db.Column(db.String)
     age = db.Column(db.Integer)
     email = db.Column(db.String)
-    role = db.Column(db.String)
+    role = db.Column(db.String, db.CheckConstraint("role in ('customer', 'executor')"))
     phone = db.Column(db.String)
     # orders = db.relationship('Order', backref='user', lazy='dynamic')  # orders - user
     offers = db.relationship('Offer', backref='user', lazy='dynamic')  # offers - user
