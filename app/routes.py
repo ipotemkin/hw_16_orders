@@ -100,11 +100,10 @@ def del_user(uid):
 def add_order():
     if not (new_order := request.get_json()):
         raise BadRequestError
-    print(new_order)
     order_ = Order(**new_order)
     db.session.add(order_)
     db.session.commit()
-    return new_order, 201
+    return get_json('orders', order_.id), 201
 
 
 @app.route('/orders/<int:uid>', methods=['PUT'])
@@ -146,11 +145,10 @@ def del_order(uid):
 def add_offer():
     if not (new_offer := request.get_json()):
         raise BadRequestError
-    print(new_offer)
     offer_ = Offer(**new_offer)
     db.session.add(offer_)
     db.session.commit()
-    return new_offer, 201
+    return get_json('offers', offer_.id), 201
 
 
 @app.route('/offers/<int:uid>', methods=['PUT'])

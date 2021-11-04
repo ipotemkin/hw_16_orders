@@ -1,13 +1,13 @@
 body {
-    font-family: Arial;
+    font-family: Arial, sans-serif;
 }
 
 .list_block {
     background-color: whitesmoke;
-    border-radius: 15px;
+    border-radius: 5px;
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
-    box-shadow: 2px 2px 4px gray;
+    box-shadow: 2px 2px 20px gray;
 }
